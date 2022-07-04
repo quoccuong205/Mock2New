@@ -1,19 +1,32 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 // import 'antd/dist/antd.css';
 import './tableMyProfile.css';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { selectOrders } from '../redux/order/selector';
 import { Form, Table } from 'antd';
 import { useNavigate } from 'react-router-dom';
-import { selectUser } from '../redux/auth/selector';
+import {
+  selectAccessToken,
+  selectAuthen,
+  selectUser,
+} from '../redux/auth/selector';
 import { format } from 'date-fns';
+import { getMyProfile } from '../redux/auth/action';
 
 function MyProfile() {
   const nav = useNavigate();
   const handleEdit = () => {
     nav('/userdetail/editprofile');
   };
+  const auth = useSelector(selectAuthen);
+  console.log(auth);
+  const dispatch = useDispatch();
+  const accessToken = useSelector(selectAccessToken);
   const user = useSelector(selectUser);
+  console.log(user);
+  useEffect(() => {
+    getMyProfile(dispatch, accessToken);
+  }, [user]);
   const userRender = {
     avatar: user.avatar,
     username: user.username,
@@ -23,17 +36,17 @@ function MyProfile() {
   };
 
   const listOrder = useSelector(selectOrders);
-  const listOrders = listOrder.map((item) => ({
+  const listOrders = listOrder?.map((item) => ({
     key: '#' + item.id,
     // createdAt: item.createdAt.slice(0, 10),
     createdAt: format(new Date(item.createdAt), 'dd/MM/yyyy'),
     status: item.status,
     total: '$' + item.totalPrice.toFixed(2),
   }));
-  console.log(listOrders);
+  // console.log(listOrders);
 
   const [form] = Form.useForm();
-  const [data, setData] = useState(listOrders.reverse());
+  const [data, setData] = useState(listOrders?.reverse());
 
   const columns = [
     {
@@ -72,7 +85,7 @@ function MyProfile() {
           />
           <div className="flex flex-col ">
             <p className="w-[65px] h-[42px] ml-[35px] mt-[39px] mb-0 font-roboto font-bold text-[36px] leading-[42px] not-italic">
-              {userRender.username}
+              {user.username}
             </p>
             <p className="w-[195px] h-[23px] ml-[35px] mt-[3px] mb-0 font-roboto font-bold text-[20px] leading-[23px] not-italic">
               {userRender.email}

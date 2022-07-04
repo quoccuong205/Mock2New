@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Outlet, useNavigate } from 'react-router-dom';
 import NavTabs from '../Components/NavTabs';
@@ -8,6 +8,7 @@ import {
   selectAuthen,
   selectDeviceId,
   selectRefreshToken,
+  selectUser,
 } from '../redux/auth/selector';
 import { getAllOrder } from '../redux/order/action';
 
@@ -18,9 +19,12 @@ function UserDetail() {
   const refreshToken = useSelector(selectRefreshToken);
   const deviceId = useSelector(selectDeviceId);
   const auth = useSelector(selectAuthen);
-  console.log(auth);
+  useEffect(() => {
+    getMyProfile(dispatch, accessToken);
+  }, []);
   const handleMyprofile = async () => {
     await getMyProfile(dispatch, accessToken);
+    await getAllOrder(accessToken, dispatch);
     nav('/userdetail/myprofile');
   };
   const handleOrder = async () => {

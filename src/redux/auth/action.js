@@ -1,7 +1,12 @@
 import 'antd/dist/antd.css';
 import axios from '../axios';
 import { message } from 'antd';
-import { getMyProfileSuccess, loginSuccess, logoutSuccess } from './reducer';
+import {
+  changeUserNameSuccess,
+  getMyProfileSuccess,
+  loginSuccess,
+  logoutSuccess,
+} from './reducer';
 
 export const login = async (values, dispatch, nav) => {
   try {
@@ -63,8 +68,9 @@ export const getMyProfile = async (dispatch, accessToken) => {
     const { data } = await axios.get('/v1/users/my-profile', {
       headers: { Authorization: `Bearer ${accessToken}` },
     });
-    dispatch(getMyProfileSuccess(data));
-    console.log(data + 'abc');
+    getMyProfileSuccess(data);
+    console.log(data);
+    console.log('avbb');
   } catch (error) {
     message.error({
       title: 'Get infor failed',
@@ -120,6 +126,7 @@ export const changeUsername = async (accessToken, username) => {
         headers: { Authorization: `Bearer ${accessToken}` },
       },
     );
+    changeUserNameSuccess(data);
     message.success({
       title: 'Change Username successed',
     });

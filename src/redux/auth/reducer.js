@@ -13,11 +13,18 @@ const authSlice = createSlice({
       state.auth = null;
     },
     getMyProfileSuccess: (state, action) => {
-      state.auth.auth.data.user = action.payload;
+      state.auth.data.user = action.payload;
+    },
+    changeUserNameSuccess: (state, action) => {
+      state.auth.data.user = action.payload;
     },
   },
 });
 
-export const { loginSuccess, logoutSuccess, getMyProfileSuccess } =
-  authSlice.actions;
+export const {
+  loginSuccess,
+  logoutSuccess,
+  getMyProfileSuccess,
+  changeUserNameSuccess,
+} = authSlice.actions;
 export default authSlice.reducer;

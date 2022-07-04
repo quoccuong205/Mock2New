@@ -7,7 +7,6 @@ import {
   changeEmail,
   changePassword,
   changeUsername,
-  getMyProfile,
 } from '../redux/auth/action';
 import { selectAccessToken, selectUser } from '../redux/auth/selector';
 
@@ -27,31 +26,26 @@ function EditProfile() {
     console.log('start');
     console.log(user.username);
     await changeUsername(accessToken, user.username);
-    await getMyProfile(dispatch, accessToken);
-    nav('/userdetail/myprofile');
+    // nav('/userdetail/myprofile');
   };
   const handleEmail = async () => {
     await changeEmail(accessToken, user.email);
-    await getMyProfile(dispatch, accessToken);
-    nav('/userdetail/myprofile');
+    // nav('/userdetail/myprofile');
   };
   const handlePassword = async () => {
     console.log(user.password);
     console.log(user.oldPassword);
     await changePassword(accessToken, user.password, user.oldPassword);
-    await getMyProfile(dispatch, accessToken);
-    nav('/userdetail/myprofile');
+    // nav('/userdetail/myprofile');
   };
   const handleContact = async () => {
     console.log(user.contact);
     await changeContact(accessToken, user.contact);
-    await getMyProfile(dispatch, accessToken);
-    nav('/userdetail/myprofile');
+    // nav('/userdetail/myprofile');
   };
   const handleAvatar = async () => {
     await changeAvatar(accessToken, user.avatar);
-    await getMyProfile(dispatch, accessToken);
-    nav('/userdetail/myprofile');
+    // nav('/userdetail/myprofile');
   };
   const onChangeInput = function (event) {
     const { name, value } = event.target;
