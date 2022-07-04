@@ -6,6 +6,7 @@ import { selectOrders } from '../redux/order/selector';
 import { Form, Table } from 'antd';
 import { useNavigate } from 'react-router-dom';
 import { selectUser } from '../redux/auth/selector';
+import { format } from 'date-fns';
 
 function MyProfile() {
   const nav = useNavigate();
@@ -24,7 +25,8 @@ function MyProfile() {
   const listOrder = useSelector(selectOrders);
   const listOrders = listOrder.map((item) => ({
     key: '#' + item.id,
-    createdAt: item.createdAt.slice(0, 10),
+    // createdAt: item.createdAt.slice(0, 10),
+    createdAt: format(new Date(item.createdAt), 'dd/MM/yyyy'),
     status: item.status,
     total: '$' + item.totalPrice.toFixed(2),
   }));

@@ -12,6 +12,8 @@ import {
   selectRefreshToken,
 } from '../redux/auth/selector';
 import { getAllOrder } from '../redux/order/action';
+import { logout } from '../redux/auth/action';
+import { format } from 'date-fns';
 
 function OrderHistory() {
   const nav = useNavigate();
@@ -37,7 +39,7 @@ function OrderHistory() {
   console.log('list order' + listOrder + listOrder[0]);
   const listOrders = listOrder.map((item) => ({
     key: '#' + item.id,
-    createdAt: item.createdAt.slice(0, 10),
+    createdAt: format(new Date(item.createdAt), 'dd/MM/yyyy'),
     status: item.status,
     total: '$' + item.totalPrice.toFixed(2),
   }));

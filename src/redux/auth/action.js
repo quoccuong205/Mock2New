@@ -58,7 +58,7 @@ export const sendCode = async (email) => {
   }
 };
 
-export const logout = async (refreshToken, deviceId) => {
+export const logout = async (refreshToken, deviceId, dispatch) => {
   try {
     await axios.post('/v1/auth/logout', {
       refreshToken,
@@ -115,7 +115,7 @@ export const changeEmail = async (accessToken, email) => {
   try {
     await axios.get('/v1/users/change-email', {
       headers: { Authorization: `Bearer ${accessToken}` },
-      contact,
+      email,
     });
     message.success({
       title: 'Change Email successed',
