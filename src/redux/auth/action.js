@@ -1,7 +1,7 @@
 import 'antd/dist/antd.css';
 import axios from '../axios';
 import { message } from 'antd';
-import { loginSuccess, logoutSuccess } from './reducer';
+import { getMyProfileSuccess, loginSuccess, logoutSuccess } from './reducer';
 
 export const login = async (values, dispatch, nav) => {
   try {
@@ -58,6 +58,21 @@ export const sendCode = async (email) => {
   }
 };
 
+export const getMyProfile = async (dispatch, accessToken) => {
+  try {
+    const { data } = await axios.get('/v1/users/my-profile', {
+      headers: { Authorization: `Bearer ${accessToken}` },
+    });
+    dispatch(getMyProfileSuccess(data));
+    console.log(data + 'abc');
+  } catch (error) {
+    message.error({
+      title: 'Get infor failed',
+      content: error.response,
+    });
+  }
+};
+
 export const logout = async (refreshToken, deviceId, dispatch) => {
   try {
     await axios.post('/v1/auth/logout', {
@@ -77,10 +92,14 @@ export const logout = async (refreshToken, deviceId, dispatch) => {
 
 export const changeContact = async (accessToken, contact) => {
   try {
-    await axios.get('/v1/users/change-contact', {
-      headers: { Authorization: `Bearer ${accessToken}` },
-      contact,
-    });
+    const { data } = await axios.patch(
+      '/v1/users/change-contact',
+      { contact: contact },
+      {
+        headers: { Authorization: `Bearer ${accessToken}` },
+      },
+    );
+    console.log(data);
     message.success({
       title: 'Change Contact successed',
     });
@@ -94,15 +113,17 @@ export const changeContact = async (accessToken, contact) => {
 
 export const changeUsername = async (accessToken, username) => {
   try {
-    const { data } = await axios.post('/v1/users/change-username', username, {
-      headers: { Authorization: `Bearer ${accessToken}` },
-    });
-    debugger;
-    console.log(username);
-    console.log(data);
+    const { data } = await axios.patch(
+      '/v1/users/change-username',
+      { username: username },
+      {
+        headers: { Authorization: `Bearer ${accessToken}` },
+      },
+    );
     message.success({
       title: 'Change Username successed',
     });
+    console.log(data);
   } catch (error) {
     message.error({
       title: 'Change Username failed',
@@ -113,10 +134,14 @@ export const changeUsername = async (accessToken, username) => {
 
 export const changeEmail = async (accessToken, email) => {
   try {
-    await axios.get('/v1/users/change-email', {
-      headers: { Authorization: `Bearer ${accessToken}` },
-      email,
-    });
+    const { data } = await axios.patch(
+      '/v1/users/change-email',
+      { email: email },
+      {
+        headers: { Authorization: `Bearer ${accessToken}` },
+      },
+    );
+    console.log(data);
     message.success({
       title: 'Change Email successed',
     });
@@ -128,12 +153,16 @@ export const changeEmail = async (accessToken, email) => {
   }
 };
 
-export const changePassword = async (accessToken, password) => {
+export const changePassword = async (accessToken, newPass, oldPass) => {
   try {
-    await axios.get('/v1/users/change-password', {
-      headers: { Authorization: `Bearer ${accessToken}` },
-      password,
-    });
+    const { data } = await axios.patch(
+      '/v1/users/change-password',
+      { oldPassword: oldPass, newPassword: newPass },
+      {
+        headers: { Authorization: `Bearer ${accessToken}` },
+      },
+    );
+    console.log(data);
     message.success({
       title: 'Change Password successed',
     });
@@ -147,11 +176,15 @@ export const changePassword = async (accessToken, password) => {
 
 export const changeAvatar = async (accessToken, avatar) => {
   try {
-    await axios.get('/v1/users/change-avatar', {
-      headers: { Authorization: `Bearer ${accessToken}` },
-      avatar,
-    });
-    message.error({
+    const { data } = await axios.patch(
+      '/v1/users/change-avatar',
+      { avatar: avatar },
+      {
+        headers: { Authorization: `Bearer ${accessToken}` },
+      },
+    );
+    console.log(data);
+    message.success({
       title: 'Change Avatar successed',
     });
   } catch (error) {

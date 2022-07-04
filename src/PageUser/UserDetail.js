@@ -2,7 +2,7 @@ import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Outlet, useNavigate } from 'react-router-dom';
 import NavTabs from '../Components/NavTabs';
-import { logout } from '../redux/auth/action';
+import { getMyProfile, logout } from '../redux/auth/action';
 import {
   selectAccessToken,
   selectAuthen,
@@ -20,7 +20,7 @@ function UserDetail() {
   const auth = useSelector(selectAuthen);
   console.log(auth);
   const handleMyprofile = async () => {
-    await getAllOrder(accessToken, dispatch);
+    await getMyProfile(dispatch, accessToken);
     nav('/userdetail/myprofile');
   };
   const handleOrder = async () => {

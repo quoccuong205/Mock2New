@@ -1,38 +1,57 @@
 import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
 import {
   changeAvatar,
   changeContact,
   changeEmail,
   changePassword,
   changeUsername,
+  getMyProfile,
 } from '../redux/auth/action';
-import { selectAccessToken } from '../redux/auth/selector';
+import { selectAccessToken, selectUser } from '../redux/auth/selector';
 
 function EditProfile() {
   const dispatch = useDispatch();
   const accessToken = useSelector(selectAccessToken);
+  const nav = useNavigate();
   const [user, setUser] = useState({
     username: '',
     email: '',
+    oldPassword: '',
     password: '',
     contact: '',
     avatar: '',
   });
   const handleUserName = async () => {
-    await dispatch(changeUsername(accessToken, user.username));
+    console.log('start');
+    console.log(user.username);
+    await changeUsername(accessToken, user.username);
+    await getMyProfile(dispatch, accessToken);
+    nav('/userdetail/myprofile');
   };
   const handleEmail = async () => {
-    await dispatch(changeEmail(accessToken, user.email));
+    await changeEmail(accessToken, user.email);
+    await getMyProfile(dispatch, accessToken);
+    nav('/userdetail/myprofile');
   };
   const handlePassword = async () => {
-    await dispatch(changePassword(accessToken, user.password));
+    console.log(user.password);
+    console.log(user.oldPassword);
+    await changePassword(accessToken, user.password, user.oldPassword);
+    await getMyProfile(dispatch, accessToken);
+    nav('/userdetail/myprofile');
   };
   const handleContact = async () => {
-    await dispatch(changeContact(accessToken, user.contact));
+    console.log(user.contact);
+    await changeContact(accessToken, user.contact);
+    await getMyProfile(dispatch, accessToken);
+    nav('/userdetail/myprofile');
   };
   const handleAvatar = async () => {
-    await dispatch(changeAvatar(accessToken, user.avatar));
+    await changeAvatar(accessToken, user.avatar);
+    await getMyProfile(dispatch, accessToken);
+    nav('/userdetail/myprofile');
   };
   const onChangeInput = function (event) {
     const { name, value } = event.target;
@@ -78,10 +97,18 @@ function EditProfile() {
       </div>
       <div className="flex flex-row">
         <input
-          className="w-[700px] p-4 h-[50px] mt-[50px] ml-[50px] text-[22px] rounded-[5px] mr-10 font-roboto text-[#757575] border-2"
+          className="w-[230px] p-4 h-[50px] mt-[50px] ml-[50px] text-[22px] rounded-[5px] mr-10 font-roboto text-[#757575] border-2"
+          name="oldPassword"
+          type="password"
+          placeholder="Old Password"
+          value={user.oldPassword}
+          onChange={onChangeInput}
+        />
+        <input
+          className="w-[230px] p-4 h-[50px] mt-[50px] ml-[20px] text-[22px] rounded-[5px] mr-10 font-roboto text-[#757575] border-2"
           name="password"
           type="password"
-          placeholder="Password"
+          placeholder="New Password"
           value={user.password}
           onChange={onChangeInput}
         />
